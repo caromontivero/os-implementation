@@ -21,8 +21,32 @@
 #include <geekos/timer.h>
 #include <geekos/keyboard.h>
 
+bool Key_Released(unsigned int key)
+{
+  return((key & KEY_RELEASE_FLAG) == 0);
+}
 
+bool Should_Exit(unsigned int key)
+{
+    return( key == (KEY_CTRL_FLAG | 'd') );
+}
 
+void Print_Key_Pressed()
+{
+  unsigned int key_pressed = 0;
+  
+  Print("Welcome to Caro!\n");
+  while (!Should_Exit(key_pressed))
+  {
+    key_pressed = Wait_For_Key();
+    if ( Key_Released(key_pressed) )
+    {
+      Print("%c",key_pressed);
+    }
+  }
+  
+    Print("\nGoodbye!\n");
+}
 
 /*
  * Kernel C code entry point.
@@ -42,15 +66,10 @@ void Main(struct Boot_Info* bootInfo)
     Init_Timer();
     Init_Keyboard();
 
-
     Set_Current_Attr(ATTRIB(BLACK, GREEN|BRIGHT));
     Print("Welcome to GeekOS!\n");
     Set_Current_Attr(ATTRIB(BLACK, GRAY));
-
-
-    TODO("Start a kernel thread to echo pressed keys and print counts");
-
-
+    Start_Kernel_Thread(Print_Key_Pressed, 0, PRIORITY_NORMAL, false);
 
     /* Now this thread is done. */
     Exit(0);

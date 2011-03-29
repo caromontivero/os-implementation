@@ -21,27 +21,27 @@
 #include <geekos/timer.h>
 #include <geekos/keyboard.h>
 
-bool Key_Released(unsigned int key)
+bool Key_Pressed(Keycode key)
 {
   return((key & KEY_RELEASE_FLAG) == 0);
 }
 
-bool Should_Exit(unsigned int key)
+bool Should_Exit(Keycode key)
 {
     return( key == (KEY_CTRL_FLAG | 'd') );
 }
 
 void Print_Key_Pressed()
 {
-  unsigned int key_pressed = 0;
+  Keycode key_code = 0;
   
   Print("Welcome to Caro!\n");
-  while (!Should_Exit(key_pressed))
+  while (!Should_Exit(key_code))
   {
-    key_pressed = Wait_For_Key();
-    if ( Key_Released(key_pressed) )
+    key_code = Wait_For_Key();
+    if ( Key_Pressed(key_code) )
     {
-      Print("%c",key_pressed);
+      Print("%c",key_code);
     }
   }
   

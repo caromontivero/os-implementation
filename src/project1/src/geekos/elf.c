@@ -43,10 +43,7 @@
 #define ELFMAG2		'L'
 #define ELFMAG3		'F'
 
-//Returned value:
-// 0 = success
-// != 0 Failure
-
+//Returned value: 0 if successful, < 0 on error
 int Parse_ELF_Header(char *exeFileData, ulong_t exeFileLength, elfHeader *elf_hdr)
 {
     int result = -1;
@@ -79,6 +76,7 @@ void Load_Program_Headers(char *exeFileData, struct Exe_Segment *segmentList, in
         count++;  
     }
 }
+
 /**
  * From the data of an ELF executable, determine how its segments
  * need to be loaded into memory.
@@ -110,4 +108,3 @@ int Parse_ELF_Executable(char *exeFileData, ulong_t exeFileLength,
       }
       return result;
 }
-
